@@ -1,8 +1,8 @@
 from pynput import keyboard
-import datetime
 import time
 import os
 import sys
+import json
 from contextlib import contextmanager
 
 @contextmanager
@@ -18,7 +18,7 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-password = 'passW0rd!'
+password = 'test'
 # count = 0 #keep track of password index for array
 requirement = 400 #the number of lines we want in the file
 buffer = [] 
@@ -31,17 +31,19 @@ counter = 0
 user = ''
 
 def welcomeUser():
+    global user 
+    
     user = input('What is your name (no spaces)? \n') or 'data'
-    file = open(f'{user}.txt' , 'a+')
-    file = open(f'{user}.txt' , 'r+')
+    user_file = f'{user}.txt'
+    file = open(f'{user}.txt', 'a+')
+    file = open(f'{user}.txt', 'r+')
     length = len(file.readlines())
     print('Welcome! Please input the password `{0}` {1} more times.'.format(password, requirement - length))
-    print("Please enter your password (hint, it's" , password , " - for now!)")
     print("Press enter to submit your password entry.")
 
 def main():
     try:
-        write_file(collect(2,0))
+        write_file(collect(2,0), (f'{user}.txt'))
     except KeyboardInterrupt:
         if (query_yes_no("Do you want to save your data?")): 
             write_file(totalData)
@@ -235,7 +237,6 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
                 (Trial {} of {}).".format(i + 1, numPasswordsNeeded + numRunupNeeded))
             i += 1
         else: print("\nPassword mis-entered.  Try again:")
-        print(totalData)
 
         buffer = []
 
@@ -243,10 +244,13 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
     if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information")
     return totalData
 
-def write_file(data=totalData):
+def write_file(data=totalData, file=user_file):
+    print(f'user_file: {user_file}')
+    print(f'user: {user}')
     print(data)
     f = open(file, 'a+')
-    f.write(data)
+    json.dump(data, f)
+    f.close()
 
 # Collect events until released
 # with keyboard.Listener(
