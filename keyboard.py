@@ -18,7 +18,7 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-password = 'test'
+password = 'passW0rd!'
 # count = 0 #keep track of password index for array
 requirement = 400 #the number of lines we want in the file
 buffer = [] 
@@ -244,8 +244,8 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
     if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information")
     return totalData
 
-def write_file(data=totalData, file=user_file):
-    print(f'user_file: {user_file}')
+def write_file(data=totalData, file=f'{user}.txt'):
+    print(f'user_file: {user}')
     print(f'user: {user}')
     print(data)
     f = open(file, 'a+')
