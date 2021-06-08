@@ -20,9 +20,11 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
+
 password = 'passW0rd!'
 # count = 0 #keep track of password index for array
-requirement = 400 #the number of lines we want in the file
+global requirement
+requirement = 10 #the number of lines we want in the file
 buffer = [] 
 totalData = []
 startTime = None
@@ -36,15 +38,16 @@ def welcomeUser():
     global user 
     
     user = input('What is your name (no spaces)? \n') or 'data'
-    file = open(f'{user}.txt', 'a+')
-    file = open(f'{user}.txt', 'r+')
-    length = len(file.readlines())
-    print('Welcome! Please input the password `{0}` {1} more times.'.format(password, requirement - length))
+    #file = open(f'{user}.txt', 'a+')
+    #file = open(f'{user}.txt', 'r+')
+    #length = len(file.readlines())
+    #print('Welcome! Please input the password `{0}` {1} more times.'.format(password, requirement - length))
+    print('Welcome! Please input the password `{0}` {1} times.'.format(password, requirement))
     print("Press enter to submit your password entry.")
 
 def main():
     try:
-        write_to_csv(collect(2,0), (f'{user}.csv'))
+        write_to_csv(collect(requirement,0), (f'{user}.csv'))
     except KeyboardInterrupt:
         if (query_yes_no("Do you want to save your data?")): 
             write_to_csv(totalData)

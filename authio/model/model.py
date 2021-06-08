@@ -224,7 +224,7 @@ def runModel(user) -> tuple:
         (0.80, 0.20), useValidCount=True)
     data = sliceDataset(data)
     model = shallowNeuralNetworkModel(data)
-    model.save(f"{user}")
+    model.save(f"model/save/model{user}")
     #model = deepNeuralNetworkModel(data)
     result = evaluateModel(model, data)
     return result
