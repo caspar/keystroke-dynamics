@@ -3,6 +3,8 @@ import time
 import os
 import sys
 import json
+import csv
+# import pandas
 from contextlib import contextmanager
 
 @contextmanager
@@ -34,7 +36,6 @@ def welcomeUser():
     global user 
     
     user = input('What is your name (no spaces)? \n') or 'data'
-    user_file = f'{user}.txt'
     file = open(f'{user}.txt', 'a+')
     file = open(f'{user}.txt', 'r+')
     length = len(file.readlines())
@@ -43,10 +44,10 @@ def welcomeUser():
 
 def main():
     try:
-        write_file(collect(2,0), (f'{user}.txt'))
+        write_to_csv(collect(2,0), (f'{user}.csv'))
     except KeyboardInterrupt:
         if (query_yes_no("Do you want to save your data?")): 
-            write_file(totalData)
+            write_to_csv(totalData)
         else: print('Data not saved')
         sys.exit()
  
@@ -233,6 +234,8 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
         if passwordProperlyEntered():
             if i >= numRunupNeeded:
                 totalData.append(buffer)
+                # totalData.append('\n')
+                # string = '\n'.join(totalData)
             if verbose: print("\nFantastic, now enter the password again! \
                 (Trial {} of {}).".format(i + 1, numPasswordsNeeded + numRunupNeeded))
             i += 1
@@ -251,6 +254,12 @@ def write_file(data=totalData, file=f'{user}.txt'):
     f = open(file, 'a+')
     json.dump(data, f)
     f.close()
+
+def write_to_csv(data=totalData, file=f'{user}.csv'):
+    with open(file, 'a+', newline='') as file:
+        #TODO split lines
+        writer = csv.writer(file)
+        writer.writerows(data)
 
 # Collect events until released
 # with keyboard.Listener(
