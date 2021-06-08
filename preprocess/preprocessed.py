@@ -45,13 +45,13 @@ def generate_raw(file_path, userID, trial_number):
         time_stamps = []
         for t in split:
             time_stamps.append( float(t.replace(' ', "").replace('\"', "").replace(')', "")) )
-        print(time_stamps)
+        #print(time_stamps)
 
         which_trial = (i+1)//trial_number + 1
         which_sample = 10 if (i+1) % trial_number == 0 else (i+1) % trial_number
 
         result = transform(userID, which_trial, which_sample, time_stamps)
-        print(result)
+        #print(result)
         raw.append(result)
 
     pd.DataFrame(raw).to_csv(f"{userID}.csv", header=None, index=False)
