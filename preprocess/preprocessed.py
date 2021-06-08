@@ -1,5 +1,5 @@
-import sys, re
-import pandas as pd
+import sys, re, csv
+#import pandas as pd
 from tqdm import tqdm
 
 def transform(userID, trial_number, sample_number, time_stamps):
@@ -54,7 +54,11 @@ def generate_raw(file_path, userID, trial_number):
         #print(result)
         raw.append(result)
 
-    pd.DataFrame(raw).to_csv(f"{userID}.csv", header=None, index=False)
+    with open(f"raw-data{userID}.csv","w+") as my_csv:
+        csvWriter = csv.writer(my_csv,delimiter=',')
+        csvWriter.writerows(raw)
+    
+    #pd.DataFrame(raw).to_csv(f"{userID}.csv", header=None, index=False)
 
 def main(argv):
 
