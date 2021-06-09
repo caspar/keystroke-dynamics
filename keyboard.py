@@ -21,10 +21,9 @@ def suppress_stdout():
 
 
 
-password = 'passW0rd!'
+password = 'test'
 # count = 0 #keep track of password index for array
-global requirement
-requirement = 10 #the number of lines we want in the file
+requirement = 2 #the number of lines we want in the file
 buffer = [] 
 totalData = []
 startTime = None
@@ -203,12 +202,12 @@ def passwordProperlyEntered():
     global buffer
     global password
     
-    buildString = ""
+    build_string = ""
     for entry in buffer:
-        if entry[1] == "DOWN": buildString += entry[0]
-    return buildString == password
+        if entry[1] == "DOWN": build_string += entry[0]
+    return build_string == password 
 
-def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
+def collect(requirement, numRunupNeeded, verbose = True):
     global buffer
     global endTime
     global startTime
@@ -220,7 +219,7 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
     totalData = []
 
     i = 0
-    while i < numPasswordsNeeded + numRunupNeeded:
+    while i < requirement + numRunupNeeded:
         with keyboard.Listener(on_press=push_down, on_release=release) as listener:
             listener.join()
         
@@ -235,12 +234,12 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
         key_presses = 0
         counter = 0
         if passwordProperlyEntered():
-            if i >= numRunupNeeded:
+            if i >= numRunupNeeded and len(buffer) == 2*len(password):
                 totalData.append(buffer)
                 # totalData.append('\n')
                 # string = '\n'.join(totalData)
             if verbose: print("\nFantastic, now enter the password again! \
-                (Trial {} of {}).".format(i + 1, numPasswordsNeeded + numRunupNeeded))
+                (Trial {} of {}).".format(i + 1, requirement + numRunupNeeded))
             i += 1
         else: print("\nPassword mis-entered.  Try again:")
 
