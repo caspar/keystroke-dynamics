@@ -223,8 +223,8 @@ def runModel(user) -> tuple:
     data = prepareDataset('data/processed-valid-data.csv', 'data/processed-invalid-data.csv', \
         (0.80, 0.20), useValidCount=True)
     data = sliceDataset(data)
-    model = shallowNeuralNetworkModel(data)
+    #model = shallowNeuralNetworkModel(data)
+    model = deepNeuralNetworkModel(data)
     model.save(f"model/save/model{user}")
-    #model = deepNeuralNetworkModel(data)
     result = evaluateModel(model, data)
     return result
