@@ -4,7 +4,6 @@ import os
 import sys
 import json
 import csv
-# import pandas
 from contextlib import contextmanager
 
 @contextmanager
@@ -20,10 +19,9 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-
-password = 'test'
+password = 'passW0rd!'
 # count = 0 #keep track of password index for array
-requirement = 2 #the number of lines we want in the file
+requirement = 10 #the number of lines we want in the file
 buffer = [] 
 totalData = []
 startTime = None
@@ -233,8 +231,8 @@ def collect(requirement, numRunupNeeded, verbose = True):
         shift_modifier = False
         key_presses = 0
         counter = 0
-        if passwordProperlyEntered():
-            if i >= numRunupNeeded and len(buffer) == 2*len(password):
+        if passwordProperlyEntered() and (len(buffer) == 2*len(password)):
+            if i >= numRunupNeeded:
                 totalData.append(buffer)
                 # totalData.append('\n')
                 # string = '\n'.join(totalData)
@@ -247,6 +245,7 @@ def collect(requirement, numRunupNeeded, verbose = True):
 
 
     if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information")
+    sys.stdout = open(os.devnull, 'w')
     return totalData
 
 def write_file(data=totalData, file=f'{user}.txt'):
@@ -263,6 +262,11 @@ def write_to_csv(data=totalData, file=f'{user}.csv'):
         writer = csv.writer(file)
         writer.writerows(data)
 
+def __exit__(self, *args):
+    if self.suppress_stdout:
+        sys.stdout = self._stdout
+    if self.suppress_stderr:
+        sys.stderr = self._stderr
 # Collect events until released
 # with keyboard.Listener(
                 #write file
