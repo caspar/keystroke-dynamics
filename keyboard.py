@@ -4,7 +4,6 @@ import os
 import sys
 import json
 import csv
-# import pandas
 from contextlib import contextmanager
 
 @contextmanager
@@ -20,10 +19,8 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-
 password = 'passW0rd!'
 # count = 0 #keep track of password index for array
-global requirement
 requirement = 10 #the number of lines we want in the file
 buffer = [] 
 totalData = []
@@ -203,12 +200,12 @@ def passwordProperlyEntered():
     global buffer
     global password
     
-    buildString = ""
+    build_string = ""
     for entry in buffer:
-        if entry[1] == "DOWN": buildString += entry[0]
-    return buildString == password
+        if entry[1] == "DOWN": build_string += entry[0]
+    return build_string == password 
 
-def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
+def collect(requirement, numRunupNeeded, verbose = True):
     global buffer
     global endTime
     global startTime
@@ -220,7 +217,7 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
     totalData = []
 
     i = 0
-    while i < numPasswordsNeeded + numRunupNeeded:
+    while i < requirement + numRunupNeeded:
         with keyboard.Listener(on_press=push_down, on_release=release) as listener:
             listener.join()
         
@@ -234,13 +231,13 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
         shift_modifier = False
         key_presses = 0
         counter = 0
-        if passwordProperlyEntered():
+        if passwordProperlyEntered() and (len(buffer) == 2*len(password)):
             if i >= numRunupNeeded:
                 totalData.append(buffer)
                 # totalData.append('\n')
                 # string = '\n'.join(totalData)
             if verbose: print("\nFantastic, now enter the password again! \
-                (Trial {} of {}).".format(i + 1, numPasswordsNeeded + numRunupNeeded))
+                (Trial {} of {}).".format(i + 1, requirement + numRunupNeeded))
             i += 1
         else: print("\nPassword mis-entered.  Try again:")
 
@@ -248,6 +245,7 @@ def collect(numPasswordsNeeded, numRunupNeeded, verbose = True):
 
 
     if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information")
+    sys.stdout = open(os.devnull, 'w')
     return totalData
 
 def write_file(data=totalData, file=f'{user}.txt'):
@@ -264,6 +262,11 @@ def write_to_csv(data=totalData, file=f'{user}.csv'):
         writer = csv.writer(file)
         writer.writerows(data)
 
+def __exit__(self, *args):
+    if self.suppress_stdout:
+        sys.stdout = self._stdout
+    if self.suppress_stderr:
+        sys.stderr = self._stderr
 # Collect events until released
 # with keyboard.Listener(
                 #write file
