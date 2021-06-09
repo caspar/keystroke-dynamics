@@ -39,8 +39,8 @@ def welcomeUser():
     #file = open(f'{user}.txt', 'r+')
     #length = len(file.readlines())
     #print('Welcome! Please input the password `{0}` {1} more times.'.format(password, requirement - length))
-    print('Welcome! Please input the password `{0}` {1} times.'.format(password, requirement))
-    print("Press enter to submit your password entry.")
+    #print('Welcome! Please input the password `{0}` {1} times.'.format(password, requirement))
+    #print("Press enter to submit your password entry.")
 
 def main():
     try:
@@ -205,15 +205,19 @@ def passwordProperlyEntered():
         if entry[1] == "DOWN": build_string += entry[0]
     return build_string == password 
 
-def collect(requirement, numRunupNeeded, verbose = True):
+def collect(requirement, numRunupNeeded, verbose = True, demo_mode = False):
     global buffer
     global endTime
     global startTime
     global shift_modifier
     global key_presses
     global counter
-    
-    if verbose: welcomeUser()
+   
+    if verbose: 
+        welcomeUser()
+        print('Welcome! Please input the password `{0}` {1} times.'.format(password, requirement))
+        print("Press enter to submit your password entry.")
+
     totalData = []
 
     i = 0
@@ -236,17 +240,25 @@ def collect(requirement, numRunupNeeded, verbose = True):
                 totalData.append(buffer)
                 # totalData.append('\n')
                 # string = '\n'.join(totalData)
-            if verbose: print("\nFantastic, now enter the password again! \
-                (Trial {} of {}).".format(i + 1, requirement + numRunupNeeded))
+            if verbose and i == requirement + numRunupNeeded - 1:
+                print("\nFantastic.! (Trial {} of {}) is done.".format(i + 1, requirement + numRunupNeeded))
+            else:
+                print("\nFantastic, now enter the password again! \
+                    (Trial {} of {}).".format(i + 1, requirement + numRunupNeeded))
             i += 1
         else: print("\nPassword mis-entered.  Try again:")
 
         buffer = []
 
 
-    if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information")
+    if verbose: print("Great - we've finished gathering training data from you.  Please wait while we process this information.")
+
+    if demo_mode == True:
+        return totalData, user, len(password)
+    else:
+        return totalData
+    
     sys.stdout = open(os.devnull, 'w')
-    return totalData
 
 def write_file(data=totalData, file=f'{user}.txt'):
     print(f'user_file: {user}')

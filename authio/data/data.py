@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 import os
+import pickle
 
 # Function: collectLabelledData
 # Description: 
@@ -41,6 +42,9 @@ def processLabelledData(labelledData, validDataFileName, invalidDataFileName) ->
     dataMatrix = np.array(labelledData, dtype=np.float32)
     dataMean = dataMatrix.mean(axis=0)[1:]
     dataStd = dataMatrix.std(axis=0)[1:]
+
+    with open('model/save/parameters.pkl', 'wb') as f:
+        pickle.dump([dataMean, dataStd], f)
 
     # split labelled data
     for data in labelledData:

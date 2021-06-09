@@ -2,13 +2,18 @@ import sys, re, csv
 #import pandas as pd
 from tqdm import tqdm
 
-def transform(userID, trial_number, sample_number, line, pwd_length):
+def transform(userID, trial_number, sample_number, line, pwd_length, demo_mode=False):
     """
     Transform time stamp sequence to features: Hold time, Up-Down time, Down-Down time
     """
-    keys = line.split(",")[::3]
-    stroke_types = line.split(",")[1::3]
-    times = [float(t) for t in line.split(",")[2::3]]
+    if demo_mode:
+        keys = line[::3]
+        stroke_types = line[1::3]
+        times = [float(t) for t in line[2::3]]
+    else:
+        keys = line.split(",")[::3]
+        stroke_types = line.split(",")[1::3]
+        times = [float(t) for t in line.split(",")[2::3]]
 
     result = [userID, trial_number, sample_number]
 
