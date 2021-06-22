@@ -44,7 +44,7 @@ def welcomeUser():
 
 def main():
     try:
-        write_to_csv(collect(requirement,0), (f'{user}.csv'))
+        write_to_csv(collect(requirement,0), (f'rawdata/{user}.csv'))
     except KeyboardInterrupt:
         if (query_yes_no("Do you want to save your data?")): 
             write_to_csv(totalData)
@@ -268,7 +268,7 @@ def write_file(data=totalData, file=f'{user}.txt'):
     json.dump(data, f)
     f.close()
 
-def write_to_csv(data=totalData, file=f'{user}.csv'):
+def write_to_csv(data=totalData, file=f'rawdata/{user}.csv'):
     with open(file, 'a+', newline='') as file:
         #TODO split lines
         writer = csv.writer(file)
