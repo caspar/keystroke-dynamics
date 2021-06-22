@@ -1,8 +1,10 @@
-import pickle
+import pickle, os
 import numpy as np
 from keyboard import collect
 from preprocess.preprocessed import transform
 from tensorflow.keras.models import load_model
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def preprocess(data, user, pwd_length):
 
@@ -27,7 +29,7 @@ def loadModel(user):
 
     userID = 0 if user == "yuming" else 1
 
-    model = load_model(f"./authio/model/save/model{userID}")
+    model = load_model(f"./authio/model/save/model{userID}", compile=False)
 
     return model
 
